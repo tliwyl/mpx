@@ -1,0 +1,41 @@
+
+<template minapp='native' xlang='wxml'>
+	<view class="container">
+		<list
+			id="Jcom"
+			class="ccc"
+		/>
+	</view>
+</template>
+	
+<script>
+import { createPage } from '@mpxjs/core';
+createPage({
+	onLoad() {},
+	jump() {
+		wx.navigateTo({
+			url: '/packCenter/pages/index',
+		});
+	},
+	onReady() {
+		const d = this.selectComponent('#Jcom');
+		d.updListData();
+	},
+});
+</script>
+	
+	<style lang='css'>
+.container {
+}
+</style>
+	<script  type='application/json' lang='json'>
+{
+	"navigationBarTitleText": "首页",
+	"usingComponents": {
+		 "list": "@/components/list",
+		 "dialog":"@/components/msgDialog.mpx"
+	 }
+ }
+	</script>
+	
+	

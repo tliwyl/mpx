@@ -1,0 +1,27 @@
+<script lang="ts" src="./app.ts"></script>
+
+<style>
+</style>
+
+<script type="application/json">
+  {
+    "pages": [
+			"./pages/index"
+		],
+		"packages": [
+			"./packGroup/app.mpx?root=packGroup",
+			"./packCenter/app.mpx?root=packCenter"
+    ]
+  }
+</script>
+
+<!--JSON还可通过以下形式编写-->
+
+<!--<script name="json">-->
+<!--  // 可以写注释，通过defs注入的常量做一些判断之类的操作-->
+<!--  module.exports = {-->
+<!--    pages: [-->
+<!--      './pages/index'-->
+<!--    ]-->
+<!--  }-->
+<!--</script>-->

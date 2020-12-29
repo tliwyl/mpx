@@ -1,0 +1,96 @@
+<template minapp='native' xlang='wxml'>
+	<view class="mask {{bShow?'':'hide'}}">
+		<view
+			class='container'
+			style="{{width?'width:'+width+'px;':''}}"
+		>
+			<view
+				wx:if="{{slots.header}}"
+				class="slot-header"
+			>
+				<slot
+					name="header"
+					wx:if="{{slots.header}}"
+				></slot>
+			</view>
+			<view
+				wx:elif="{{title}}"
+				class="header {{hasCloseIcon?'has-close-icon':''}}"
+			>
+				<view
+					wx:if="{{hasCloseIcon}}"
+					class="close-btn"
+					bindtap="close"
+					style='{{(align === "center" && subtitle.length === 0) ? "top:20rpx;" : ""}}'
+				>
+				</view>
+				<block>
+					<view class="title">{{title}}</view>
+				</block>
+			</view>
+			<slot name="definition-header"></slot>
+			<view class="content {{(slots.header||title)?'':'margin-top-50'}}">
+				<slot name="content"></slot>
+			</view>
+
+			<slot
+				name="footer"
+				wx:if="{{slots.footer}}"
+			></slot>
+		</view>
+	</view>
+</template>
+<script>
+import { createComponent } from '@mpxjs/core';
+const slotDefinition = {
+	header: false,
+	footer: false,
+};
+createComponent({
+	options: {
+		multipleSlots: true,
+	},
+	properties: {
+		width: {
+			type: Number || undefined,
+			value: void 0,
+		},
+		maxHeight: {
+			type: String,
+			value: '',
+		},
+		slots: {
+			type: Object,
+			value: slotDefinition,
+		},
+		title: {
+			type: String,
+			value: '',
+		},
+		hasCloseIcon: {
+			type: Boolean,
+			value: false,
+		},
+	},
+	data: {
+		bShow: false,
+	},
+	methods: {
+		open() {
+
+			this.bShow = true;
+		},
+		close() {
+			this.bShow = false;
+		},
+	},
+	ready() {}
+});
+</script>
+<style lang='css'>
+</style>
+<script  type='application/json' lang="json">
+{ 
+ "component": true
+}
+</script>

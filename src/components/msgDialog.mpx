@@ -1,0 +1,149 @@
+<template minapp='native' xlang='wxml'>
+	<dialog
+		wx:ref="dialogCom"
+		title="{{title}}"
+		slots="{{slots}}"
+	>
+		<view
+			class="content"
+			wx:if="{{useContentSlot}}"
+			slot="content"
+		>
+			<slot></slot>
+		</view>
+		<view
+			wx:else
+			class="content"
+			style="{{styleStr}}"
+			slot="content"
+		>
+			<text style="{{contentStyle}}">{{content}}</text>
+		</view>
+
+		<view
+			class="footer"
+			slot="footer"
+		>
+			<view
+				class="btn {{item.sClass}} {{index==item.length-1?'last':''}}"
+				wx:for="{{buttons}}"
+				bindtap="_tapBtn(index)"
+			>{{item.text}}</view>
+		</view>
+	</dialog>
+</template>
+
+<script>
+import { createComponent } from '@mpxjs/core'
+const defaultButtons = [
+	{
+		text: '确定',
+		sClass: 'success',
+		click: (self) => {
+			self.close();
+		}
+	}
+]
+const defaultOpt = {
+	title: '',
+	content: '',
+	buttons: defaultButtons
+};
+
+createComponent({
+	properties: {
+		useContentSlot: {
+			type: Boolean,
+			value: false,
+		},
+		styleOptions: {
+			type: Object,
+			value: {},
+		}
+	},
+	data: {
+		title: '',
+		content: '',
+		contentStyle: '',
+		buttons: defaultButtons,
+		slots: {
+			header: false,
+			footer: true,
+		}
+	},
+	computed: {
+		styleStr() {
+			const { styleOptions, title } = this;
+			const defaultStyle = {
+				fontFamily: title ? 'PingFangSC-Regular' : 'PingFangSC-Medium',
+			};
+			const styleObj = {
+				...defaultStyle,
+				...styleOptions,
+			};
+			const keys = Object.keys(styleObj);
+			//驼峰转换例如textAlign=>text-align
+			const resolveCamels = (k) => {
+				return k.replace(/([A-Z])/g, ($1) => {
+					return `-${$1.toLowerCase()}`;
+				});
+			};
+
+			// 转换成style 字符串
+			const convertToStyle = (k) => `${resolveCamels(k)}:${styleObj[k]};`;
+			return keys.reduce((res, current) => {
+				return (res += convertToStyle(current));
+			}, '');
+		}
+	},
+	watch: {
+		buttons: function (val) {
+			this.slots = {
+				header: false,
+				footer: !!(val.length > 0),
+			}
+		}
+	},
+	methods: {
+		open(option) {
+			//const com = this.selectComponent('#dialogCom');
+			const opt = { ...defaultOpt, ...option };
+			this.title = opt.title || '';
+			this.content = opt.content;
+			this.buttons = opt.buttons;
+			this.contentStyle = opt.contentStyle || '';
+			this.$refs.dialogCom.open();
+		},
+		close() {
+			const com = this.$refs.dialogCom;
+			//const com = this.selectComponent('#dialogCom');
+			com.close();
+		},
+		_tapBtn(index) {
+			const buttons = this.buttons;
+			const oBtn = buttons[index];
+			const fn = oBtn.click;
+			console.log(buttons);
+			typeof fn === 'function' && fn(this);
+			//type === 'certain' && this.triggerEvent('fnCertain', this);
+			//type === 'cancle' && this.triggerEvent('fnCancle', this);
+		}
+	}
+})
+</script>
+
+<style lang='css'>
+.content {
+	word-break: break-all;
+	word-wrap: break-word;
+}
+</style>
+<script  type='application/json' lang='json'>
+{ 
+ "component": true,
+	"usingComponents": {
+	 "dialog":"@/components/dialog.mpx"
+ 	}
+}
+</script>
+

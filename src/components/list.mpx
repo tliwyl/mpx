@@ -1,0 +1,58 @@
+<template>
+	<view>
+		<view
+			class="list"
+			wx:ref="aaa"
+		>
+			<view
+				wx:for="{{listData}}"
+				wx:key="index"
+			>{{item}}
+			</view>
+		</view>
+		<view>222</view>
+		<dia
+			wx:ref="ddd"
+			ids="{{ids}}"
+		/>
+	</view>
+</template>
+
+<style lang="stylus">
+.list {
+	background-color: red;
+}
+</style>
+<script>
+import { createComponent } from '@mpxjs/core';
+
+createComponent({
+	data: {
+		ids: 9999,
+	},
+	properties: {
+		listData: {
+			type: Array,
+			value: ['手机', '电视', '电脑'],
+		},
+	},
+	methods: {
+		updListData() {
+			this.listData = ['手机', 'mac', '平板'];
+			this.ids = 88888;
+			console.log(this);
+			setTimeout(() => {
+				console.log(this);
+			}, 100);
+		},
+	},
+});
+</script>
+<script type="application/json">
+  {
+		"component": true,
+		"usingComponents": {
+			 "dia":"@/components/d.mpx"
+		}
+  }
+</script>
